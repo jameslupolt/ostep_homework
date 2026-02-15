@@ -14,6 +14,7 @@ Build:
 
 Run examples:
   ./timer_precision
+  ./timer_precision --iters 1000000 --pin   # optional pin-to-CPU0 to reduce jitter
   ./syscall_cost --iters 20000000
   ./ctxswitch_cost --iters 2000000
 
