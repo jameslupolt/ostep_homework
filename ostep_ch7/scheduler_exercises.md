@@ -1,3 +1,11 @@
+## Get scheduler.py
+[Here](https://pages.cs.wisc.edu/~remzi/OSTEP/#homework)
+
+## Update scheduler.py to Python 3 in place
+```
+2to3 -w scheduler.py
+```
+
 ## Definitions you’ll use for every question
 
 Assumptions (from the chapter’s standard setup): all jobs arrive at **time 0**, single CPU, no I/O, ignore context-switch overhead.
