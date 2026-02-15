@@ -1,7 +1,3 @@
-In your PDF, **Chapter 7 (“Scheduling: Introduction”)** ends with a **Homework (Simulation)** section about `scheduler.py` (it’s on the page labeled **“SCHEDULING: INTRODUCTION 85”**). The questions are about **response time** and **turnaround time** for FIFO, SJF, and RR.
-
-I’ll solve all 7, and I’ll also give you commands you can run in `scheduler.py` to verify.
-
 ## Definitions you’ll use for every question
 
 Assumptions (from the chapter’s standard setup): all jobs arrive at **time 0**, single CPU, no I/O, ignore context-switch overhead.
@@ -271,13 +267,6 @@ python3 scheduler.py -p SJF  -l 100,200,300 -c
 # Q3
 python3 scheduler.py -p RR -q 1 -l 100,200,300 -c
 ```
-
-**Type:** Sourced (flags/options from the upstream homework repo)
-**Confidence:** 9/10 ([GitHub][1])
-
----
-
-If you tell me what your instructor expects for **the FIFO job order in Q2/Q3** (as listed vs. a different arrival order), I can tailor the numeric answers to match exactly what they want—but the reasoning above will stay the same.
 
 [1]: https://raw.githubusercontent.com/remzi-arpacidusseau/ostep-homework/master/cpu-sched/scheduler.py "raw.githubusercontent.com"
 
