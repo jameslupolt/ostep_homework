@@ -46,8 +46,9 @@ static long parse_long_arg(int argc, char **argv, const char *flag, long defval)
     for (int i = 1; i < argc - 1; i++) {
         if (strcmp(argv[i], flag) == 0) {
             char *end = NULL;
+            errno = 0;
             long v = strtol(argv[i + 1], &end, 10);
-            if (!end || *end != '\0') {
+            if (end == argv[i + 1] || !end || *end != '\0' || errno == ERANGE) {
                 fprintf(stderr, "Bad value for %s: %s\n", flag, argv[i + 1]);
                 exit(2);
             }

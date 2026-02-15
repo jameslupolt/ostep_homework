@@ -56,6 +56,10 @@ static double measure_pipe_pair_ns_per_iter(long iters) {
         xread(p[0], &byte, 1);
     }
     uint64_t t1 = now_ns();
+    if (t0 == 0 || t1 == 0) {
+        fprintf(stderr, "clock_gettime failed during pipe baseline\n");
+        exit(1);
+    }
 
     close(p[0]);
     close(p[1]);
@@ -65,6 +69,10 @@ static double measure_pipe_pair_ns_per_iter(long iters) {
 
 int main(int argc, char **argv) {
     long iters = parse_long_arg(argc, argv, "--iters", 2000000L);
+    if (iters <= 0) {
+        fprintf(stderr, "--iters must be > 0\n");
+        return 2;
+    }
 
     // Pin parent now; child will pin after fork.
     bool pinned_parent = pin_to_cpu0();
@@ -114,6 +122,7 @@ int main(int argc, char **argv) {
     // Parent
     close(p2c[0]); // parent writes to p2c[1]
     close(c2p[1]); // parent reads from c2p[0]
+    int status = 0;
 
     // Warm-up handshake
     for (int i = 0; i < 10000; i++) {
@@ -127,11 +136,17 @@ int main(int argc, char **argv) {
         xread(c2p[0], &byte, 1);
     }
     uint64_t t1 = now_ns();
+    if (t0 == 0 || t1 == 0) {
+        fprintf(stderr, "clock_gettime failed during ping-pong timing\n");
+        close(p2c[1]);
+        close(c2p[0]);
+        waitpid(pid, &status, 0);
+        return 1;
+    }
 
     close(p2c[1]);
     close(c2p[0]);
 
-    int status = 0;
     waitpid(pid, &status, 0);
 
     double pingpong_ns_per_iter = (double)(t1 - t0) / (double)iters;

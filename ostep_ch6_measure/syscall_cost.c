@@ -12,6 +12,10 @@ static inline long do_syscall(void) {
 
 int main(int argc, char **argv) {
     long iters = parse_long_arg(argc, argv, "--iters", 20000000L);
+    if (iters <= 0) {
+        fprintf(stderr, "--iters must be > 0\n");
+        return 2;
+    }
 
     // Pinning reduces noise; not required, but helpful.
     if (!pin_to_cpu0()) {
@@ -40,6 +44,10 @@ int main(int argc, char **argv) {
         compiler_barrier();
     }
     uint64_t t3 = now_ns();
+    if (t0 == 0 || t1 == 0 || t2 == 0 || t3 == 0) {
+        fprintf(stderr, "clock_gettime failed; cannot compute syscall cost\n");
+        return 1;
+    }
 
     uint64_t with_ns = t1 - t0;
     uint64_t base_ns = t3 - t2;

@@ -70,15 +70,15 @@ int main(int argc, char **argv) {
             free(deltas);
             return 1;
         }
+        uint64_t d = 0;
         if (b < a) {
             // Should not happen with a monotonic clock, but WSL/VM setups can be odd.
             // Record as 0 and count it.
             backwards++;
-            deltas[i] = 0;
-            zeros++;
-            continue;
+            d = 0;
+        } else {
+            d = b - a;
         }
-        uint64_t d = b - a;
         deltas[i] = d;
         sum += (unsigned __int128)d;
         if (d == 0) zeros++;
